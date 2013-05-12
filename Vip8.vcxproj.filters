@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Chip8">
+      <UniqueIdentifier>{69ab322b-7cf3-478e-a863-bb700a29f284}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Chip8\Chip8.cpp">
+      <Filter>Chip8</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Chip8\Gpu.cpp">
+      <Filter>Chip8</Filter>
+    </ClCompile>
+    <ClCompile Include="GLVideoModule.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Chip8\Chip8.h">
+      <Filter>Chip8</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Chip8\Gpu.h">
+      <Filter>Chip8</Filter>
+    </ClInclude>
+    <ClInclude Include="GLVideoModule.h" />
+  </ItemGroup>
+</Project>
