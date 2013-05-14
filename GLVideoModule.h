@@ -2,10 +2,12 @@
 #define __GLVIDEOMODULE_H__
 
 #include "Common.h"
+#include <Fgl/Win32Viewport.h>
 
 #include <Windows.h>
 #include <gl/GL.h>
 
+// TODO: This should be separated.
 class GLVideoModule : public VideoModule
 {
 public:
@@ -17,7 +19,7 @@ public:
 private:
 	void SetupDC();
 
-	Viewport *viewport;
+	Win32Viewport *viewport;
 	HWND outputHandle;
 	HDC dc;
 	HGLRC rc;

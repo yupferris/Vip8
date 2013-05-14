@@ -2,8 +2,8 @@
 
 GLVideoModule::GLVideoModule(Viewport *viewport)
 {
-	this->viewport = viewport;
-	outputHandle = (HWND)viewport->GetNativeHandle();
+	this->viewport = (Win32Viewport *)viewport;
+	outputHandle = this->viewport->GetHandle();
 	SetupDC();
 	rc = wglCreateContext(dc);
 	wglMakeCurrent(dc, rc);
@@ -24,7 +24,7 @@ GLVideoModule::~GLVideoModule()
 
 void GLVideoModule::SetOutput(int width, int height, const unsigned int *data)
 {
-	auto newOutputHandle = (HWND)viewport->GetNativeHandle();
+	auto newOutputHandle = viewport->GetHandle();
 	if (newOutputHandle != outputHandle)
 	{
 		wglMakeCurrent(NULL, NULL);

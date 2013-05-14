@@ -16,6 +16,7 @@ Thumbs.db
 *.sdf
 *.opensdf
 *.ipch
+*.aps
 
 # Ignore locally installed NuGet packages.
 .nuget/

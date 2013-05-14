@@ -35,6 +35,7 @@ int Main(const List<String>& arguments)
 		auto fileLoadRomImage = MenuItem::Create("Load ROM Image...");
 		fileLoadRomImage->Click += [&] ()
 			{
+				// TODO: File filters
 				auto fileName = DialogWindow::OpenFile(window, "Load ROM Image");
 				if (fileName.Length())
 				{

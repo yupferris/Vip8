@@ -60,7 +60,7 @@ void Chip8::Update()
 {
 	if (!running) return;
 	int t = 16 - (Time::GetCurrent() - timer);
-	if (t > 0) Threading::Sleep(t);
+	Threading::Sleep(t > 1 ? t : 1);
 	timer = Time::GetCurrent();
 
 	try
