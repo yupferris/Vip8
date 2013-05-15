@@ -8,7 +8,7 @@
 #include <gl/GL.h>
 
 // TODO: This should be separated.
-class GLVideoModule : public VideoModule
+class GLVideoModule : public IVideoModule
 {
 public:
 	GLVideoModule(Viewport *viewport);

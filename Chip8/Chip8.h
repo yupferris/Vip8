@@ -4,7 +4,7 @@
 #include "../Common.h"
 #include "Gpu.h"
 
-class Chip8 : public Emulator
+class Chip8 : public IEmulator
 {
 public:
 	Chip8();
@@ -16,7 +16,7 @@ public:
 	int GetOutputWidth() const;
 	int GetOutputHeight() const;
 
-	void SetVideoModule(VideoModule *videoModule);
+	void SetVideoModule(IVideoModule *videoModule);
 
 	void LoadRom(const List<unsigned char>& input);
 	bool HasRom() const;

@@ -9,7 +9,7 @@ public:
 	Gpu();
 	~Gpu();
 
-	void SetVideoModule(VideoModule *videoModule);
+	void SetVideoModule(IVideoModule *videoModule);
 
 	void Clear();
 	void Update();
@@ -17,7 +17,7 @@ public:
 
 private:
 	unsigned int *framebuffer;
-	VideoModule *videoModule;
+	IVideoModule *videoModule;
 };
 
 #endif

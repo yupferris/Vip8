@@ -13,7 +13,7 @@ Gpu::~Gpu()
 	delete [] framebuffer;
 }
 
-void Gpu::SetVideoModule(VideoModule *videoModule)
+void Gpu::SetVideoModule(IVideoModule *videoModule)
 {
 	this->videoModule = videoModule;
 }

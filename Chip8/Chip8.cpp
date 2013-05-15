@@ -354,7 +354,7 @@ int Chip8::GetOutputHeight() const
 	return 32;
 }
 
-void Chip8::SetVideoModule(VideoModule *videoModule)
+void Chip8::SetVideoModule(IVideoModule *videoModule)
 {
 	gpu->SetVideoModule(videoModule);
 }
