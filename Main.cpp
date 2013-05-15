@@ -85,7 +85,7 @@ int Main(const List<String>& arguments)
 		window->SetMenu(menu);
 
 		auto viewport = Viewport::Create();
-		window->AddChild(viewport);
+		window->SetContent(viewport);
 
 		auto videoModule = new GLVideoModule(viewport);
 		chip8.SetVideoModule(videoModule);
