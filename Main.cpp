@@ -14,11 +14,12 @@ int Main(const List<String>& arguments)
 		window->KeyDown += [&] (Key key) { if (key == Key::Escape) running = false; };
 		window->Closing += [&] { running = false; };
 
-		auto loadRomImage = [&] (const String& fileName)
+		auto loadAndStartRomImage = [&] (const String& fileName)
 			{
 				try
 				{
 					chip8.LoadRom(File::ReadAllBytes(fileName));
+					chip8.Start();
 				}
 				catch (const Exception& e)
 				{
@@ -35,9 +36,8 @@ int Main(const List<String>& arguments)
 				auto fileName = DialogWindow::OpenFile(window, "Load ROM Image");
 				if (fileName.Length())
 				{
-					if (chip8.IsRunning()) chip8.Reset();
-					loadRomImage(fileName);
-					if (chip8.HasRom()) chip8.Start();
+					chip8.Reset();
+					loadAndStartRomImage(fileName);
 				}
 			};
 		fileMenu->AddChild(fileLoadRomImage);
@@ -46,6 +46,7 @@ int Main(const List<String>& arguments)
 		fileExit->Click += [&] { running = false; };
 		fileMenu->AddChild(fileExit);
 		menu->AddChild(fileMenu);
+
 		auto systemMenu = Menu::Create("System");
 		auto systemReset = MenuItem::Create("Reset");
 		systemReset->Click += [&]
@@ -55,6 +56,7 @@ int Main(const List<String>& arguments)
 			};
 		systemMenu->AddChild(systemReset);
 		systemMenu->AddSeparator();
+
 		auto systemAudioMenu = Menu::Create("Audio");
 		auto systemAudioEnabled = MenuItem::Create("Enabled");
 		systemAudioEnabled->SetChecked(true);
@@ -115,11 +117,7 @@ int Main(const List<String>& arguments)
 		auto videoDriver = new GLVideoDriver(viewport);
 		chip8.SetVideoDriver(videoDriver);
 
-		if (arguments.Count())
-		{
-			loadRomImage(arguments[0]); // TODO: proper arg's
-			if (chip8.HasRom()) chip8.Start();
-		}
+		if (arguments.Count()) loadAndStartRomImage(arguments[0]); // TODO: proper arg's
 
 		while (running)
 		{
@@ -132,8 +130,10 @@ int Main(const List<String>& arguments)
 		delete fileMenu;
 		delete fileLoadRomImage;
 		delete fileExit;
+
 		delete systemMenu;
 		delete systemReset;
+
 		delete systemAudioMenu;
 		delete systemAudioEnabled;
 		delete systemAudioLatencyMenu;
