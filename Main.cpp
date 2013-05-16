@@ -63,43 +63,57 @@ int Main(const List<String>& arguments)
 		systemAudioEnabled->SetToggleEnabled(true);
 		systemAudioMenu->AddChild(systemAudioEnabled);
 		auto systemAudioLatencyMenu = Menu::Create("Latency");
-		auto systemAudioLatency50ms = MenuItem::Create("50 ms");
-		systemAudioLatencyMenu->AddChild(systemAudioLatency50ms);
-		auto systemAudioLatency100ms = MenuItem::Create("100 ms");
-		systemAudioLatencyMenu->AddChild(systemAudioLatency100ms);
-		auto systemAudioLatency250ms = MenuItem::Create("250 ms");
-		systemAudioLatencyMenu->AddChild(systemAudioLatency250ms);
-		auto systemAudioLatency500ms = MenuItem::Create("500 ms");
-		systemAudioLatencyMenu->AddChild(systemAudioLatency500ms);
-		auto systemAudioLatency1000ms = MenuItem::Create("1000 ms");
-		systemAudioLatencyMenu->AddChild(systemAudioLatency1000ms);
+		const int numLatencies = 5;
+		const int latencies[] = { 50, 100, 250, 500, 1000 };
+		int latencyIndex = 0;
+		List<MenuItem *> systemAudioLatencyItems;
+		auto reflectLatencyIndex = [&]
+			{
+				auto latency = latencies[latencyIndex];
+				// TODO: make functional
+				for (int i = 0; i < systemAudioLatencyItems.Count(); i++) systemAudioLatencyItems[i]->SetChecked(i == latencyIndex);
+			};
+		for (int i = 0; i < numLatencies; i++)
+		{
+			auto latency = latencies[i];
+			auto item = MenuItem::Create(String(latency) + " ms");
+			item->Click += [&, i]
+				{
+					latencyIndex = i;
+					reflectLatencyIndex();
+				};
+			systemAudioLatencyMenu->AddChild(item);
+			systemAudioLatencyItems.Add(item);
+		}
+		reflectLatencyIndex();
 		systemAudioMenu->AddChild(systemAudioLatencyMenu);
 		systemMenu->AddChild(systemAudioMenu);
 		
 		auto systemVideoMenu = Menu::Create("Video");
 		auto systemVideoZoomMenu = Menu::Create("Zoom");
 		const int numZooms = 4;
-		const int zoomSizes[] = { 4, 8, 16, 32 };
+		const int zooms[] = { 4, 8, 16, 32 };
 		int zoomIndex = 1;
-		auto systemVideoZoomItems = new MenuItem *[numZooms];
-		auto reflectZoom = [&]
+		List<MenuItem *> systemVideoZoomItems;
+		auto reflectZoomIndex = [&]
 			{
-				auto size = zoomSizes[zoomIndex];
-				window->SetDesiredSize(chip8.GetOutputWidth() * size, chip8.GetOutputHeight() * size);
-				for (int i = 0; i < numZooms; i++) systemVideoZoomItems[i]->SetChecked(i == zoomIndex);
+				auto zoom = zooms[zoomIndex];
+				window->SetDesiredSize(chip8.GetOutputWidth() * zoom, chip8.GetOutputHeight() * zoom);
+				for (int i = 0; i < systemVideoZoomItems.Count(); i++) systemVideoZoomItems[i]->SetChecked(i == zoomIndex);
 			};
 		for (int i = 0; i < numZooms; i++)
 		{
-			auto size = zoomSizes[i];
-			systemVideoZoomItems[i] = MenuItem::Create(String(size) + "x" + size);
-			systemVideoZoomItems[i]->Click += [&, i]
+			auto zoom = zooms[i];
+			auto item = MenuItem::Create(String(zoom) + "x" + zoom);
+			item->Click += [&, i]
 				{
 					zoomIndex = i;
-					reflectZoom();
+					reflectZoomIndex();
 				};
-			systemVideoZoomMenu->AddChild(systemVideoZoomItems[i]);
+			systemVideoZoomMenu->AddChild(item);
+			systemVideoZoomItems.Add(item);
 		}
-		reflectZoom();
+		reflectZoomIndex();
 		systemVideoMenu->AddChild(systemVideoZoomMenu);
 		systemMenu->AddChild(systemVideoMenu);
 
@@ -137,16 +151,11 @@ int Main(const List<String>& arguments)
 		delete systemAudioMenu;
 		delete systemAudioEnabled;
 		delete systemAudioLatencyMenu;
-		delete systemAudioLatency50ms;
-		delete systemAudioLatency100ms;
-		delete systemAudioLatency250ms;
-		delete systemAudioLatency500ms;
-		delete systemAudioLatency1000ms;
+		for (int i = 0; i < systemAudioLatencyItems.Count(); i++) delete systemAudioLatencyItems[i];
 
 		delete systemVideoMenu;
 		delete systemVideoZoomMenu;
-		for (int i = 0; i < numZooms; i++) delete systemVideoZoomItems[i];
-		delete [] systemVideoZoomItems;
+		for (int i = 0; i < systemVideoZoomItems.Count(); i++) delete systemVideoZoomItems[i];
 
 		delete helpMenu;
 		delete helpAbout;
