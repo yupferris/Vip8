@@ -7,16 +7,12 @@ int Main(const List<String>& arguments)
 	try
 	{
 		Chip8 chip8;
-		int zoom = 8;
 
 		auto running = true;
 
 		auto window = Window::Create("Vip8");
 		window->KeyDown += [&] (Key key) { if (key == Key::Escape) running = false; };
 		window->Closing += [&] { running = false; };
-
-		auto resizeWindow = [&] { window->SetDesiredSize(chip8.GetOutputWidth() * zoom, chip8.GetOutputHeight() * zoom); };
-		resizeWindow();
 
 		auto loadRomImage = [&] (const String& fileName)
 			{
@@ -77,7 +73,34 @@ int Main(const List<String>& arguments)
 		systemAudioLatencyMenu->AddChild(systemAudioLatency1000ms);
 		systemAudioMenu->AddChild(systemAudioLatencyMenu);
 		systemMenu->AddChild(systemAudioMenu);
-		// TODO: finish system menu
+		
+		auto systemVideoMenu = Menu::Create("Video");
+		auto systemVideoZoomMenu = Menu::Create("Zoom");
+		const int numZooms = 4;
+		const int zoomSizes[] = { 4, 8, 16, 32 };
+		int zoomIndex = 1;
+		auto systemVideoZoomItems = new MenuItem *[numZooms];
+		auto reflectZoom = [&]
+			{
+				auto size = zoomSizes[zoomIndex];
+				window->SetDesiredSize(chip8.GetOutputWidth() * size, chip8.GetOutputHeight() * size);
+				for (int i = 0; i < numZooms; i++) systemVideoZoomItems[i]->SetChecked(i == zoomIndex);
+			};
+		for (int i = 0; i < numZooms; i++)
+		{
+			auto size = zoomSizes[i];
+			systemVideoZoomItems[i] = MenuItem::Create(String(size) + "x" + size);
+			systemVideoZoomItems[i]->Click += [&, i]
+				{
+					zoomIndex = i;
+					reflectZoom();
+				};
+			systemVideoZoomMenu->AddChild(systemVideoZoomItems[i]);
+		}
+		reflectZoom();
+		systemVideoMenu->AddChild(systemVideoZoomMenu);
+		systemMenu->AddChild(systemVideoMenu);
+
 		menu->AddChild(systemMenu);
 		auto helpMenu = Menu::Create("Help");
 		auto helpAbout = MenuItem::Create("About...");
@@ -119,7 +142,12 @@ int Main(const List<String>& arguments)
 		delete systemAudioLatency250ms;
 		delete systemAudioLatency500ms;
 		delete systemAudioLatency1000ms;
-		// merhp
+
+		delete systemVideoMenu;
+		delete systemVideoZoomMenu;
+		for (int i = 0; i < numZooms; i++) delete systemVideoZoomItems[i];
+		delete [] systemVideoZoomItems;
+
 		delete helpMenu;
 		delete helpAbout;
 		delete viewport;
