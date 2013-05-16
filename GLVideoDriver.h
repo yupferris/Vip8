@@ -1,5 +1,5 @@
-#ifndef __GLVIDEOMODULE_H__
-#define __GLVIDEOMODULE_H__
+#ifndef __GLVIDEODRIVER_H__
+#define __GLVIDEODRIVER_H__
 
 #include "Common.h"
 #include <Fgl/Win32Viewport.h>
@@ -8,11 +8,11 @@
 #include <gl/GL.h>
 
 // TODO: This should be separated.
-class GLVideoModule : public IVideoModule
+class GLVideoDriver : public IVideoDriver
 {
 public:
-	GLVideoModule(Viewport *viewport);
-	~GLVideoModule();
+	GLVideoDriver(Viewport *viewport);
+	virtual ~GLVideoDriver();
 
 	virtual void SetOutput(int width, int height, const unsigned int *data);
 

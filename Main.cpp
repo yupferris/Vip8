@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "Chip8/Chip8.h"
-#include "GLVideoModule.h"
+#include "GLVideoDriver.h"
 
 int Main(const List<String>& arguments)
 {
@@ -13,9 +13,9 @@ int Main(const List<String>& arguments)
 
 		auto window = Window::Create("Vip8");
 		window->KeyDown += [&] (Key key) { if (key == Key::Escape) running = false; };
-		window->Closing += [&] () { running = false; };
+		window->Closing += [&] { running = false; };
 
-		auto resizeWindow = [&] () { window->SetDesiredSize(chip8.GetOutputWidth() * zoom, chip8.GetOutputHeight() * zoom); };
+		auto resizeWindow = [&] { window->SetDesiredSize(chip8.GetOutputWidth() * zoom, chip8.GetOutputHeight() * zoom); };
 		resizeWindow();
 
 		auto loadRomImage = [&] (const String& fileName)
@@ -33,7 +33,7 @@ int Main(const List<String>& arguments)
 		auto menu = Menu::Create();
 		auto fileMenu = Menu::Create("File");
 		auto fileLoadRomImage = MenuItem::Create("Load ROM Image...");
-		fileLoadRomImage->Click += [&] ()
+		fileLoadRomImage->Click += [&]
 			{
 				// TODO: File filters
 				auto fileName = DialogWindow::OpenFile(window, "Load ROM Image");
@@ -47,12 +47,12 @@ int Main(const List<String>& arguments)
 		fileMenu->AddChild(fileLoadRomImage);
 		fileMenu->AddSeparator();
 		auto fileExit = MenuItem::Create("Exit");
-		fileExit->Click += [&] () { running = false; };
+		fileExit->Click += [&] { running = false; };
 		fileMenu->AddChild(fileExit);
 		menu->AddChild(fileMenu);
 		auto systemMenu = Menu::Create("System");
 		auto systemReset = MenuItem::Create("Reset");
-		systemReset->Click += [&] ()
+		systemReset->Click += [&]
 			{
 				chip8.Reset();
 				if (chip8.HasRom()) chip8.Start();
@@ -61,6 +61,8 @@ int Main(const List<String>& arguments)
 		systemMenu->AddSeparator();
 		auto systemAudioMenu = Menu::Create("Audio");
 		auto systemAudioEnabled = MenuItem::Create("Enabled");
+		systemAudioEnabled->SetChecked(true);
+		systemAudioEnabled->SetToggleEnabled(true);
 		systemAudioMenu->AddChild(systemAudioEnabled);
 		auto systemAudioLatencyMenu = Menu::Create("Latency");
 		auto systemAudioLatency50ms = MenuItem::Create("50 ms");
@@ -79,7 +81,7 @@ int Main(const List<String>& arguments)
 		menu->AddChild(systemMenu);
 		auto helpMenu = Menu::Create("Help");
 		auto helpAbout = MenuItem::Create("About...");
-		helpAbout->Click += [&] () { MessageWindow::Info(window, "Vip8 - A Chip-8 emulator"); };
+		helpAbout->Click += [&] { MessageWindow::Info(window, "Vip8 - A Chip-8 emulator"); };
 		helpMenu->AddChild(helpAbout);
 		menu->AddChild(helpMenu);
 		window->SetMenu(menu);
@@ -87,8 +89,8 @@ int Main(const List<String>& arguments)
 		auto viewport = Viewport::Create();
 		window->SetContent(viewport);
 
-		auto videoModule = new GLVideoModule(viewport);
-		chip8.SetVideoModule(videoModule);
+		auto videoDriver = new GLVideoDriver(viewport);
+		chip8.SetVideoDriver(videoDriver);
 
 		if (arguments.Count())
 		{
@@ -121,7 +123,7 @@ int Main(const List<String>& arguments)
 		delete helpMenu;
 		delete helpAbout;
 		delete viewport;
-		delete videoModule;
+		delete videoDriver;
 	}
 	catch (const Exception& e)
 	{

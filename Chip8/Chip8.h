@@ -16,7 +16,7 @@ public:
 	int GetOutputWidth() const;
 	int GetOutputHeight() const;
 
-	void SetVideoModule(IVideoModule *videoModule);
+	void SetVideoDriver(IVideoDriver *videoDriver);
 
 	void LoadRom(const List<unsigned char>& input);
 	bool HasRom() const;

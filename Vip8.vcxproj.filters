@@ -13,7 +13,9 @@
     <ClCompile Include="Chip8\Gpu.cpp">
       <Filter>Chip8</Filter>
     </ClCompile>
-    <ClCompile Include="GLVideoModule.cpp" />
+    <ClCompile Include="GLVideoDriver.cpp" />
+    <ClCompile Include="IAudioDriver.cpp" />
+    <ClCompile Include="DirectSoundAudioDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chip8\Chip8.h">
@@ -23,6 +25,8 @@
     <ClInclude Include="Chip8\Gpu.h">
       <Filter>Chip8</Filter>
     </ClInclude>
-    <ClInclude Include="GLVideoModule.h" />
+    <ClInclude Include="GLVideoDriver.h" />
+    <ClInclude Include="IAudioDriver.h" />
+    <ClInclude Include="DirectSoundAudioDriver.h" />
   </ItemGroup>
 </Project>

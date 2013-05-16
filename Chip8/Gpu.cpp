@@ -5,7 +5,7 @@ Gpu::Gpu()
 	framebuffer = new unsigned int[64 * 32];
 	Clear();
 
-	videoModule = nullptr;
+	videoDriver = nullptr;
 }
 
 Gpu::~Gpu()
@@ -13,9 +13,9 @@ Gpu::~Gpu()
 	delete [] framebuffer;
 }
 
-void Gpu::SetVideoModule(IVideoModule *videoModule)
+void Gpu::SetVideoDriver(IVideoDriver *videoDriver)
 {
-	this->videoModule = videoModule;
+	this->videoDriver = videoDriver;
 }
 
 void Gpu::Clear()
@@ -25,7 +25,7 @@ void Gpu::Clear()
 
 void Gpu::Update()
 {
-	if (videoModule) videoModule->SetOutput(64, 32, framebuffer);
+	if (videoDriver) videoDriver->SetOutput(64, 32, framebuffer);
 }
 
 int Gpu::DrawSprite(int x, int y, unsigned char *buf, int n)

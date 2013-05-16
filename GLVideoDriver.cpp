@@ -1,6 +1,6 @@
-#include "GLVideoModule.h"
+#include "GLVideoDriver.h"
 
-GLVideoModule::GLVideoModule(Viewport *viewport)
+GLVideoDriver::GLVideoDriver(Viewport *viewport)
 {
 	this->viewport = (Win32Viewport *)viewport;
 	outputHandle = this->viewport->GetHandle();
@@ -15,14 +15,14 @@ GLVideoModule::GLVideoModule(Viewport *viewport)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-GLVideoModule::~GLVideoModule()
+GLVideoDriver::~GLVideoDriver()
 {
 	wglMakeCurrent(NULL, NULL);
 	wglDeleteContext(rc);
 	ReleaseDC(outputHandle, dc);
 }
 
-void GLVideoModule::SetOutput(int width, int height, const unsigned int *data)
+void GLVideoDriver::SetOutput(int width, int height, const unsigned int *data)
 {
 	auto newOutputHandle = viewport->GetHandle();
 	if (newOutputHandle != outputHandle)
@@ -55,7 +55,7 @@ void GLVideoModule::SetOutput(int width, int height, const unsigned int *data)
 	SwapBuffers(dc);
 }
 
-void GLVideoModule::SetupDC()
+void GLVideoDriver::SetupDC()
 {
 	dc = GetDC(outputHandle);
 	PIXELFORMATDESCRIPTOR pfd =

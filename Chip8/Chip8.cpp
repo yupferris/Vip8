@@ -354,9 +354,9 @@ int Chip8::GetOutputHeight() const
 	return 32;
 }
 
-void Chip8::SetVideoModule(IVideoModule *videoModule)
+void Chip8::SetVideoDriver(IVideoDriver *videoDriver)
 {
-	gpu->SetVideoModule(videoModule);
+	gpu->SetVideoDriver(videoDriver);
 }
 
 void Chip8::LoadRom(const List<unsigned char>& input)
