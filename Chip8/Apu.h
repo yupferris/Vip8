@@ -16,9 +16,14 @@ public:
 	void SetBeeping(bool beeping);
 
 private:
+	static void renderCallbackRouter(float *leftBuffer, float *rightBuffer, int numSamples, void *userData);
+
+	void renderCallback(float *leftBuffer, float *rightBuffer, int numSamples);
+
 	IAudioDriver *audioDriver;
 	Mutex *mutex;
 	bool beeping;
+	double beepPhase;
 };
 
 #endif

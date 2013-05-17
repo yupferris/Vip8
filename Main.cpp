@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "Chip8/Chip8.h"
 #include "GLVideoDriver.h"
+#include "DirectSoundAudioDriver.h"
 
 int Main(const List<String>& arguments)
 {
@@ -57,20 +58,24 @@ int Main(const List<String>& arguments)
 		systemMenu->AddChild(systemReset);
 		systemMenu->AddSeparator();
 
+		auto audioDriver = new DirectSoundAudioDriver();
+		chip8.SetAudioDriver(audioDriver);
+
 		auto systemAudioMenu = Menu::Create("Audio");
 		auto systemAudioEnabled = MenuItem::Create("Enabled");
-		systemAudioEnabled->SetChecked(true);
+		systemAudioEnabled->SetChecked(audioDriver->GetEnabled());
 		systemAudioEnabled->SetToggleEnabled(true);
+		systemAudioEnabled->CheckedChanged += [&] { audioDriver->SetEnabled(systemAudioEnabled->GetChecked()); };
 		systemAudioMenu->AddChild(systemAudioEnabled);
 		auto systemAudioLatencyMenu = Menu::Create("Latency");
-		const int numLatencies = 5;
-		const int latencies[] = { 50, 100, 250, 500, 1000 };
-		int latencyIndex = 0;
+		const int numLatencies = 8;
+		const int latencies[] = { 20, 40, 60, 80, 100, 200, 500, 1000 };
+		int latencyIndex = 2;
 		List<MenuItem *> systemAudioLatencyItems;
 		auto reflectLatencyIndex = [&]
 			{
 				auto latency = latencies[latencyIndex];
-				// TODO: make functional
+				audioDriver->SetLatencyMs(latency);
 				for (int i = 0; i < systemAudioLatencyItems.Count(); i++) systemAudioLatencyItems[i]->SetChecked(i == latencyIndex);
 			};
 		for (int i = 0; i < numLatencies; i++)
@@ -189,8 +194,10 @@ int Main(const List<String>& arguments)
 
 		delete helpMenu;
 		delete helpAbout;
+
 		delete viewport;
 		delete videoDriver;
+		delete audioDriver;
 	}
 	catch (const Exception& e)
 	{

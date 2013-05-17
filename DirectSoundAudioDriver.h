@@ -10,8 +10,13 @@
 class DirectSoundAudioDriver : public IAudioDriver
 {
 public:
-	DirectSoundAudioDriver(RenderCallback renderCallback, int latencyMs = 100, int sampleRate = 44100);
+	DirectSoundAudioDriver(int latencyMs = 60, int sampleRate = 44100, RenderCallback renderCallback = nullptr, void *userData = nullptr);
 	virtual ~DirectSoundAudioDriver();
+
+	virtual void SetRenderCallback(RenderCallback renderCallback, void *userData);
+
+	virtual void SetEnabled(bool enabled);
+	virtual bool GetEnabled() const;
 
 	virtual void SetLatencyMs(int latencyMs);
 	virtual int GetLatencyMs() const;
@@ -19,10 +24,27 @@ public:
 	virtual int GetSampleRate() const;
 
 private:
-	RenderCallback renderCallback;
+	static DWORD WINAPI threadProc(LPVOID lpParameter);
+
+	void createBuffers();
+	void destroyBuffers();
+	void recreateBuffers();
+
+	void renderSamples(short *buffer, int numSamples);
+
 	int latencyMs;
 	int sampleRate;
+	bool enabled;
+	RenderCallback renderCallback;
+	void *userData;
 
+	LPDIRECTSOUND8 device;
+	int bufferSizeBytes;
+	float *leftBuffer, *rightBuffer;
+	LPDIRECTSOUNDBUFFER buffer;
+	int oldPlayCursorPos;
+
+	Mutex *mutex;
 	HANDLE thread;
 };
 
