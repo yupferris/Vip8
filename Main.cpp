@@ -12,7 +12,34 @@ int Main(const List<String>& arguments)
 		auto running = true;
 
 		auto window = Window::Create("Vip8");
-		window->KeyDown += [&] (Key key) { if (key == Key::Escape) running = false; };
+		Key keys[] =
+		{
+			Key::Number1, Key::Number2, Key::Number3, Key::Number4,
+			Key::Q, Key::W, Key::E, Key::R,
+			Key::A, Key::S, Key::D, Key::F,
+			Key::Z, Key::X, Key::C, Key::V
+		};
+		window->KeyDown += [&] (Key key)
+			{
+				if (key == Key::Escape)
+				{
+					running = false;
+				}
+				else
+				{
+					for (int i = 0; i < 16; i++)
+					{
+						if (key == keys[i]) chip8.SetInput(i, true);
+					}
+				}
+			};
+		window->KeyUp += [&] (Key key)
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					if (key == keys[i]) chip8.SetInput(i, false);
+				}
+			};
 		window->Closing += [&] { running = false; };
 
 		auto loadAndStartRomImage = [&] (const String& fileName)
