@@ -5,8 +5,6 @@
 #include "Gpu.h"
 #include "Apu.h"
 
-#include "../IAudioDriver.h"
-
 class Chip8 : public IEmulator
 {
 public:

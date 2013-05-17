@@ -83,7 +83,6 @@
     <ClCompile Include="Chip8\Gpu.cpp" />
     <ClCompile Include="DirectSoundAudioDriver.cpp" />
     <ClCompile Include="GLVideoDriver.cpp" />
-    <ClCompile Include="IAudioDriver.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +92,6 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DirectSoundAudioDriver.h" />
     <ClInclude Include="GLVideoDriver.h" />
-    <ClInclude Include="IAudioDriver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

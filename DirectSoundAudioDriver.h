@@ -2,7 +2,6 @@
 #define __DIRECTSOUNDAUDIODRIVER_H__
 
 #include "Common.h"
-#include "IAudioDriver.h"
 
 #include <Windows.h>
 #include <dsound.h>

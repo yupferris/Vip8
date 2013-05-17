@@ -3,8 +3,6 @@
 
 #include "../Common.h"
 
-#include "../IAudioDriver.h"
-
 class Apu
 {
 public:
