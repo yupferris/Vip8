@@ -3,6 +3,9 @@
 
 #include "../Common.h"
 #include "Gpu.h"
+#include "Apu.h"
+
+#include "../IAudioDriver.h"
 
 class Chip8 : public IEmulator
 {
@@ -10,13 +13,14 @@ public:
 	Chip8();
 	~Chip8();
 
-	void Reset();
-	void Update();
+	virtual void Reset();
+	virtual void Update();
 
-	int GetOutputWidth() const;
-	int GetOutputHeight() const;
+	virtual int GetOutputWidth() const;
+	virtual int GetOutputHeight() const;
 
-	void SetVideoDriver(IVideoDriver *videoDriver);
+	virtual void SetVideoDriver(IVideoDriver *videoDriver);
+	virtual void SetAudioDriver(IAudioDriver *audioDriver);
 
 	void LoadRom(const List<unsigned char>& input);
 	bool HasRom() const;
@@ -27,10 +31,6 @@ public:
 
 	void SetSpeed(int speed);
 	int GetSpeed() const;
-	void SetAudioEnabled(bool enabled);
-	bool GetAudioEnabled() const;
-	void SetAudioLatencyMs(int latencyMs);
-	int GetAudioLatencyMs() const;
 
 private:
 	static void invalidOpcode();
@@ -48,8 +48,8 @@ private:
 	Stack<unsigned short> *stack;
 	bool inputs[16];
 
-	Gpu *gpu;
-	//Apu apu;
+	Gpu gpu;
+	Apu apu;
 
 	bool running;
 	bool waitingForKeypress;

@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chip8\Apu.cpp" />
     <ClCompile Include="Chip8\Chip8.cpp" />
     <ClCompile Include="Chip8\Gpu.cpp" />
     <ClCompile Include="DirectSoundAudioDriver.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chip8\Apu.h" />
     <ClInclude Include="Chip8\Chip8.h" />
     <ClInclude Include="Chip8\Gpu.h" />
     <ClInclude Include="Common.h" />

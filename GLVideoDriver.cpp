@@ -35,7 +35,6 @@ void GLVideoDriver::SetOutput(int width, int height, const unsigned int *data)
 	wglMakeCurrent(dc, rc);
 
 	glViewport(0, 0, viewport->GetWidth(), viewport->GetHeight());
-	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindTexture(GL_TEXTURE_2D, textureHandle);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, data);

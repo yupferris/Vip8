@@ -117,7 +117,34 @@ int Main(const List<String>& arguments)
 		systemVideoMenu->AddChild(systemVideoZoomMenu);
 		systemMenu->AddChild(systemVideoMenu);
 
+		auto systemSpeedMenu = Menu::Create("Speed");
+		const int numSpeeds = 10;
+		const int speeds[] = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 };
+		int speedIndex = 4;
+		List<MenuItem *> systemSpeedItems;
+		auto reflectSpeedIndex = [&]
+			{
+				auto speed = speeds[speedIndex];
+				chip8.SetSpeed(speed);
+				for (int i = 0; i < systemSpeedItems.Count(); i++) systemSpeedItems[i]->SetChecked(i == speedIndex);
+			};
+		for (int i = 0; i < numSpeeds; i++)
+		{
+			auto speed = speeds[i];
+			auto item = MenuItem::Create(String(speed) + " instruction" + (speed > 1 ? "s" : "") + "/frame");
+			item->Click += [&, i]
+				{
+					speedIndex = i;
+					reflectSpeedIndex();
+				};
+			systemSpeedMenu->AddChild(item);
+			systemSpeedItems.Add(item);
+		}
+		reflectSpeedIndex();
+		systemMenu->AddChild(systemSpeedMenu);
+
 		menu->AddChild(systemMenu);
+
 		auto helpMenu = Menu::Create("Help");
 		auto helpAbout = MenuItem::Create("About...");
 		helpAbout->Click += [&] { MessageWindow::Info(window, "Vip8 - A Chip-8 emulator"); };
@@ -156,6 +183,9 @@ int Main(const List<String>& arguments)
 		delete systemVideoMenu;
 		delete systemVideoZoomMenu;
 		for (int i = 0; i < systemVideoZoomItems.Count(); i++) delete systemVideoZoomItems[i];
+
+		delete systemSpeedMenu;
+		for (int i = 0; i < systemSpeedItems.Count(); i++) delete systemSpeedItems[i];
 
 		delete helpMenu;
 		delete helpAbout;

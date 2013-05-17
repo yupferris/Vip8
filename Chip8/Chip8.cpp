@@ -27,7 +27,6 @@ Chip8::Chip8()
 	rom = 0;
 	romSize = 0;
 	stack = new Stack<unsigned short>(16);
-	gpu = new Gpu();
 	speed = 20;
 	Reset();
 }
@@ -37,7 +36,6 @@ Chip8::~Chip8()
 	delete [] ram;
 	if (rom) delete rom;
 	delete stack;
-	delete gpu;
 }
 
 void Chip8::Reset()
@@ -50,8 +48,8 @@ void Chip8::Reset()
 	for (int i = 0; i < 4096; i++) ram[i] = random.GetNextInt(256);
 	for (int i = 0; i < 16 * 5; i++) ram[i] = charMem[i];
 	for (int i = 0; i < 16; i++) inputs[i] = false;
-	gpu->Clear();
-	//apu.SetBeeping(false);
+	gpu.Clear();
+	apu.SetBeeping(false);
 	running = false;
 	waitingForKeypress = false;
 }
@@ -69,7 +67,7 @@ void Chip8::Update()
 		if (timerSound > 0)
 		{
 			timerSound--;
-			//apu.SetBeeping(timerSound > 0);
+			apu.SetBeeping(timerSound > 0);
 		}
 
 		int keyPressReg = 0;
@@ -110,7 +108,7 @@ void Chip8::Update()
 				else if(opcode == 0x00e0)
 				{
 					// CLS
-					gpu->Clear();
+					gpu.Clear();
 				}
 				else if (opcode == 0x00ee)
 				{
@@ -244,7 +242,7 @@ void Chip8::Update()
 
 			case 0xd:
 				// DRW Vx, Vy, nibble
-				regs[15] = gpu->DrawSprite(regs[x], regs[y], ram + iReg, n);
+				regs[15] = gpu.DrawSprite(regs[x], regs[y], ram + iReg, n);
 				break;
 
 			case 0xe:
@@ -340,8 +338,7 @@ void Chip8::Update()
 		running = false;
 	}
 
-	gpu->Update();
-	//apu.Update();
+	gpu.Update();
 }
 
 int Chip8::GetOutputWidth() const
@@ -356,7 +353,12 @@ int Chip8::GetOutputHeight() const
 
 void Chip8::SetVideoDriver(IVideoDriver *videoDriver)
 {
-	gpu->SetVideoDriver(videoDriver);
+	gpu.SetVideoDriver(videoDriver);
+}
+
+void Chip8::SetAudioDriver(IAudioDriver *audioDriver)
+{
+	apu.SetAudioDriver(audioDriver);
 }
 
 void Chip8::LoadRom(const List<unsigned char>& input)
@@ -407,26 +409,6 @@ void Chip8::SetSpeed(int speed)
 int Chip8::GetSpeed() const
 {
 	return speed;
-}
-
-void Chip8::SetAudioEnabled(bool enabled)
-{
-	//apu.SetEnabled(enabled);
-}
-
-bool Chip8::GetAudioEnabled() const
-{
-	return false;//apu.GetEnabled();
-}
-
-void Chip8::SetAudioLatencyMs(int latencyMs)
-{
-	//apu.SetLatencyMs(latencyMs);
-}
-
-int Chip8::GetAudioLatencyMs() const
-{
-	return 0;//apu.GetLatencyMs();
 }
 
 void Chip8::invalidOpcode()
