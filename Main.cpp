@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "Chip8/Chip8.h"
 #include "Config.h"
-#include "DirectSoundAudioDriver.h"
 
 int Main(const List<String>& arguments)
 {
@@ -12,7 +11,7 @@ int Main(const List<String>& arguments)
 		auto videoDriver = VideoDriverFactory::CreateDefault();
 		chip8.SetVideoDriver(videoDriver);
 
-		auto audioDriver = new DirectSoundAudioDriver();
+		auto audioDriver = AudioDriverFactory::CreateDefault();
 		chip8.SetAudioDriver(audioDriver);
 
 		const int numLatencies = 8;
