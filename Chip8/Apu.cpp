@@ -36,10 +36,14 @@ void Apu::renderCallbackRouter(float *leftBuffer, float *rightBuffer, int numSam
 void Apu::renderCallback(float *leftBuffer, float *rightBuffer, int numSamples)
 {
 	mutex->Lock();
+
+	auto beepPhaseDelta = .04 * (44100.0 / (double)audioDriver->GetSampleRate());
+
 	for (int i = 0; i < numSamples; i++)
 	{
 		leftBuffer[i] = rightBuffer[i] = beeping ? (sin(beepPhase) > 0.0 ? 1.0f : -1.0f) : 0.0f;
 		beepPhase += .04;
 	}
+
 	mutex->Unlock();
 }
