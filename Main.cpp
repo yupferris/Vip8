@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "Chip8/Chip8.h"
 #include "Config.h"
-#include "GLVideoDriver.h"
 #include "DirectSoundAudioDriver.h"
 
 int Main(const List<String>& arguments)
@@ -10,7 +9,7 @@ int Main(const List<String>& arguments)
 	{
 		Chip8 chip8;
 
-		auto videoDriver = new GLVideoDriver();
+		auto videoDriver = VideoDriverFactory::CreateDefault();
 		chip8.SetVideoDriver(videoDriver);
 
 		auto audioDriver = new DirectSoundAudioDriver();
