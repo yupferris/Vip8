@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "Chip8/Chip8.h"
+#include "Config.h"
 #include "GLVideoDriver.h"
 #include "DirectSoundAudioDriver.h"
 
@@ -10,6 +11,8 @@ int Main(const List<String>& arguments)
 		Chip8 chip8;
 
 		auto running = true;
+
+		Config config(Directory::GetApplicationDirectory() + "\\config.cfg");
 
 		auto window = Window::Create("Vip8");
 		Key keys[] =
@@ -89,20 +92,25 @@ int Main(const List<String>& arguments)
 
 		auto systemAudioMenu = Menu::Create("Audio");
 		auto systemAudioEnabled = MenuItem::Create("Enabled");
-		systemAudioEnabled->SetChecked(audioDriver->GetEnabled());
+		systemAudioEnabled->SetChecked(config.AudioEnabled);
 		systemAudioEnabled->SetToggleEnabled(true);
-		systemAudioEnabled->CheckedChanged += [&] { audioDriver->SetEnabled(systemAudioEnabled->GetChecked()); };
+		auto reflectAudioEnabled = [&]
+			{
+				config.AudioEnabled = systemAudioEnabled->GetChecked();
+				audioDriver->SetEnabled(config.AudioEnabled);
+			};
+		systemAudioEnabled->CheckedChanged += reflectAudioEnabled;
+		reflectAudioEnabled();
 		systemAudioMenu->AddChild(systemAudioEnabled);
 		auto systemAudioLatencyMenu = Menu::Create("Latency");
 		const int numLatencies = 8;
 		const int latencies[] = { 20, 40, 60, 80, 100, 200, 500, 1000 };
-		int latencyIndex = 2;
 		List<MenuItem *> systemAudioLatencyItems;
 		auto reflectLatencyIndex = [&]
 			{
-				auto latency = latencies[latencyIndex];
+				auto latency = latencies[config.AudioLatencyIndex];
 				audioDriver->SetLatencyMs(latency);
-				for (int i = 0; i < systemAudioLatencyItems.Count(); i++) systemAudioLatencyItems[i]->SetChecked(i == latencyIndex);
+				for (int i = 0; i < systemAudioLatencyItems.Count(); i++) systemAudioLatencyItems[i]->SetChecked(i == config.AudioLatencyIndex);
 			};
 		for (int i = 0; i < numLatencies; i++)
 		{
@@ -110,7 +118,7 @@ int Main(const List<String>& arguments)
 			auto item = MenuItem::Create(String(latency) + " ms");
 			item->Click += [&, i]
 				{
-					latencyIndex = i;
+					config.AudioLatencyIndex = i;
 					reflectLatencyIndex();
 				};
 			systemAudioLatencyMenu->AddChild(item);
@@ -124,13 +132,12 @@ int Main(const List<String>& arguments)
 		auto systemVideoZoomMenu = Menu::Create("Zoom");
 		const int numZooms = 4;
 		const int zooms[] = { 4, 8, 16, 32 };
-		int zoomIndex = 1;
 		List<MenuItem *> systemVideoZoomItems;
 		auto reflectZoomIndex = [&]
 			{
-				auto zoom = zooms[zoomIndex];
+				auto zoom = zooms[config.VideoZoomIndex];
 				window->SetDesiredSize(chip8.GetOutputWidth() * zoom, chip8.GetOutputHeight() * zoom);
-				for (int i = 0; i < systemVideoZoomItems.Count(); i++) systemVideoZoomItems[i]->SetChecked(i == zoomIndex);
+				for (int i = 0; i < systemVideoZoomItems.Count(); i++) systemVideoZoomItems[i]->SetChecked(i == config.VideoZoomIndex);
 			};
 		for (int i = 0; i < numZooms; i++)
 		{
@@ -138,7 +145,7 @@ int Main(const List<String>& arguments)
 			auto item = MenuItem::Create(String(zoom) + "x" + zoom);
 			item->Click += [&, i]
 				{
-					zoomIndex = i;
+					config.VideoZoomIndex = i;
 					reflectZoomIndex();
 				};
 			systemVideoZoomMenu->AddChild(item);
@@ -151,13 +158,12 @@ int Main(const List<String>& arguments)
 		auto systemSpeedMenu = Menu::Create("Speed");
 		const int numSpeeds = 10;
 		const int speeds[] = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 };
-		int speedIndex = 4;
 		List<MenuItem *> systemSpeedItems;
 		auto reflectSpeedIndex = [&]
 			{
-				auto speed = speeds[speedIndex];
+				auto speed = speeds[config.SystemSpeedIndex];
 				chip8.SetSpeed(speed);
-				for (int i = 0; i < systemSpeedItems.Count(); i++) systemSpeedItems[i]->SetChecked(i == speedIndex);
+				for (int i = 0; i < systemSpeedItems.Count(); i++) systemSpeedItems[i]->SetChecked(i == config.SystemSpeedIndex);
 			};
 		for (int i = 0; i < numSpeeds; i++)
 		{
@@ -165,7 +171,7 @@ int Main(const List<String>& arguments)
 			auto item = MenuItem::Create(String(speed) + " instruction" + (speed > 1 ? "s" : "") + "/frame");
 			item->Click += [&, i]
 				{
-					speedIndex = i;
+					config.SystemSpeedIndex = i;
 					reflectSpeedIndex();
 				};
 			systemSpeedMenu->AddChild(item);
@@ -196,6 +202,8 @@ int Main(const List<String>& arguments)
 			chip8.Update();
 			window->Update();
 		}
+
+		config.Save();
 
 		delete window;
 		delete menu;

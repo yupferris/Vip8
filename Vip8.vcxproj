@@ -81,6 +81,7 @@
     <ClCompile Include="Chip8\Apu.cpp" />
     <ClCompile Include="Chip8\Chip8.cpp" />
     <ClCompile Include="Chip8\Gpu.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="DirectSoundAudioDriver.cpp" />
     <ClCompile Include="GLVideoDriver.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="Chip8\Chip8.h" />
     <ClInclude Include="Chip8\Gpu.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="DirectSoundAudioDriver.h" />
     <ClInclude Include="GLVideoDriver.h" />
   </ItemGroup>

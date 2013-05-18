@@ -18,6 +18,7 @@
     <ClCompile Include="Chip8\Apu.cpp">
       <Filter>Chip8</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chip8\Chip8.h">
@@ -32,5 +33,6 @@
     <ClInclude Include="Chip8\Apu.h">
       <Filter>Chip8</Filter>
     </ClInclude>
+    <ClInclude Include="Config.h" />
   </ItemGroup>
 </Project>
