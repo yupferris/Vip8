@@ -186,14 +186,14 @@ void Chip8::Update()
 					{
 						// ADD Vx, Vy
 						int result = regs[x] + regs[y];
-						regs[15] = (result > 255) ? 1 : 0;
+						regs[15] = result > 255 ? 1 : 0;
 						regs[x] = result;
 					}
 					break;
 
 				case 5:
 					// SUB Vx, Vy
-					regs[15] = (regs[x] < regs[y]) ? 0 : 1;
+					regs[15] = regs[x] < regs[y] ? 0 : 1;
 					regs[x] -= regs[y];
 					break;
 
@@ -205,7 +205,7 @@ void Chip8::Update()
 
 				case 7:
 					// SUBN Vx, Vy
-					regs[15] = (regs[y] < regs[x]) ? 0 : 1;
+					regs[15] = regs[y] < regs[x] ? 0 : 1;
 					regs[x] = regs[y] - regs[x];
 					break;
 
@@ -287,8 +287,12 @@ void Chip8::Update()
 					break;
 
 				case 0x1e:
-					// ADD I, Vx
-					iReg += regs[x];
+					{
+						// ADD I, Vx
+						auto result = iReg + regs[x];
+						regs[15] = result > 0xfff ? 1 : 0;
+						iReg = result & 0xfff;
+					}
 					break;
 
 				case 0x29:
@@ -310,7 +314,7 @@ void Chip8::Update()
 					{
 						// LD [I], Vx
 						for (int i = 0; i <= x; i++) ram[iReg + i] = regs[i];
-						iReg += x + 1;
+						iReg = (iReg + x + 1) & 0xfff;
 					}
 					break;
 
@@ -318,7 +322,7 @@ void Chip8::Update()
 					{
 						// LD Vx, [I]
 						for (int i = 0; i <= x; i++) regs[i] = ram[iReg + i];
-						iReg += x + 1;
+						iReg = (iReg + x + 1) & 0xfff;
 					}
 					break;
 
