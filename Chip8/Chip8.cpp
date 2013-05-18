@@ -304,8 +304,8 @@ void Chip8::Update()
 					{
 						// LD B, Vx
 						char c = regs[x];
-						ram[iReg + 2] = c % 10;
-						ram[iReg + 1] = (c / 10) % 10;
+						ram[(iReg + 2) & 0xfff] = c % 10;
+						ram[(iReg + 1) & 0xfff] = (c / 10) % 10;
 						ram[iReg] = (c / 100) % 10;
 					}
 					break;
@@ -313,7 +313,7 @@ void Chip8::Update()
 				case 0x55:
 					{
 						// LD [I], Vx
-						for (int i = 0; i <= x; i++) ram[iReg + i] = regs[i];
+						for (int i = 0; i <= x; i++) ram[(iReg + i) & 0xfff] = regs[i];
 						iReg = (iReg + x + 1) & 0xfff;
 					}
 					break;
@@ -321,7 +321,7 @@ void Chip8::Update()
 				case 0x65:
 					{
 						// LD Vx, [I]
-						for (int i = 0; i <= x; i++) regs[i] = ram[iReg + i];
+						for (int i = 0; i <= x; i++) regs[i] = ram[(iReg + i) & 0xfff];
 						iReg = (iReg + x + 1) & 0xfff;
 					}
 					break;

@@ -60,7 +60,6 @@ int Main(const List<String>& arguments)
 		auto fileLoadRomImage = MenuItem::Create("Load ROM Image...");
 		fileLoadRomImage->Click += [&]
 			{
-				// TODO: File filters
 				auto fileName = DialogWindow::OpenFile(window, "Load ROM Image");
 				if (fileName.Length())
 				{
@@ -190,7 +189,7 @@ int Main(const List<String>& arguments)
 		auto videoDriver = new GLVideoDriver(viewport);
 		chip8.SetVideoDriver(videoDriver);
 
-		if (arguments.Count()) loadAndStartRomImage(arguments[0]); // TODO: proper arg's
+		if (arguments.Count()) loadAndStartRomImage(arguments[0]);
 
 		while (running)
 		{
