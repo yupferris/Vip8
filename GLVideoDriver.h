@@ -7,17 +7,21 @@
 #include <Windows.h>
 #include <gl/GL.h>
 
-// TODO: This should be separated.
 class GLVideoDriver : public IVideoDriver
 {
 public:
-	GLVideoDriver(Viewport *viewport);
+	GLVideoDriver(Viewport *viewport = nullptr);
 	virtual ~GLVideoDriver();
+
+	virtual void SetViewport(Viewport *viewport);
 
 	virtual void SetOutput(int width, int height, const unsigned int *data);
 
 private:
-	void SetupDC();
+	void createDC();
+	void destroyDC();
+
+	void createRC();
 
 	Win32Viewport *viewport;
 	HWND outputHandle;
