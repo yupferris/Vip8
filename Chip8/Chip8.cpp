@@ -49,6 +49,7 @@ void Chip8::Reset()
 	for (int i = 0; i < 16 * 5; i++) ram[i] = charMem[i];
 	for (int i = 0; i < 16; i++) inputs[i] = false;
 	gpu.Clear();
+	gpu.Update();
 	apu.SetBeeping(false);
 	running = false;
 	waitingForKeypress = false;
@@ -338,8 +339,8 @@ void Chip8::Update()
 	}
 	catch (const Exception& e)
 	{
-		MessageWindow::Error(e.GetMsg());
 		running = false;
+		throw e;
 	}
 
 	gpu.Update();

@@ -15,13 +15,7 @@ int Main(const List<String>& arguments)
 		Config config(Directory::GetApplicationDirectory() + "\\config.cfg");
 
 		auto window = Window::Create("Vip8");
-		Key keys[] =
-		{
-			Key::Number1, Key::Number2, Key::Number3, Key::Number4,
-			Key::Q, Key::W, Key::E, Key::R,
-			Key::A, Key::S, Key::D, Key::F,
-			Key::Z, Key::X, Key::C, Key::V
-		};
+		Key keys[] = { Key::X, Key::Number1, Key::Number2, Key::Number3, Key::Q, Key::W, Key::E, Key::A, Key::S, Key::D, Key::Z, Key::C, Key::Number4, Key::R, Key::F, Key::V };
 		window->KeyDown += [&] (Key key)
 			{
 				if (key == Key::Escape)
@@ -199,7 +193,14 @@ int Main(const List<String>& arguments)
 
 		while (running)
 		{
-			chip8.Update();
+			try
+			{
+				chip8.Update();
+			}
+			catch (const Exception& e)
+			{
+				MessageWindow::Error(window, "Emulation error: " + e.GetMsg());
+			}
 			window->Update();
 		}
 

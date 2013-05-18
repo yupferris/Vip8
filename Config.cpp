@@ -42,9 +42,9 @@ bool Config::tryGetValue(const List<String>& input, const String& name, int& val
 	for (int i = 0; i < input.Count(); i++)
 	{
 		auto parts = input[i].Split(':');
-		if (parts.Count() == 2 && parts[0] == name)
+		if (parts.Count() == 2 && parts[0].Trim() == name)
 		{
-			if (parts[1].TryParseInt(value)) return true;
+			if (parts[1].Trim().TryParseInt(value)) return true;
 		}
 	}
 	return false;
