@@ -1,1 +1,1 @@
-This is a new version of my old Chip8 emulator, Chips8TheSalsa. It's more or less a "barebones" test case for creating emulators with FerrisLibs. Relies on FerrisLibs.
+This is a basic CHIP-8 emulator, and more or less a "barebones" test case for writing emulators with FerrisLibs. Relies on FerrisLibs.
