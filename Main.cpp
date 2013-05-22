@@ -209,7 +209,7 @@ int Main(const List<String>& arguments)
 				};
 		}
 
-		helpAbout->Click += [&] { MessageWindow::Info(window, "Vip8 - A Chip-8 emulator"); };
+		helpAbout->Click += [&] { MessageWindow::Info(window, "Vip8 - A Chip-8 emulator\n\nv1.0.0"); };
 
 		videoDriver->SetViewport(viewport);
 
