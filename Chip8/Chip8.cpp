@@ -366,6 +366,10 @@ void Chip8::SetAudioDriver(IAudioDriver *audioDriver)
 	apu.SetAudioDriver(audioDriver);
 }
 
+void Chip8::CpuCyclesCallback(int numCycles)
+{
+}
+
 void Chip8::LoadRom(const List<unsigned char>& input)
 {
 	if (input.Count() > 3584) throw FSL_EXCEPTION("ROM image is too large");

@@ -20,6 +20,8 @@ public:
 	virtual void SetVideoDriver(IVideoDriver *videoDriver);
 	virtual void SetAudioDriver(IAudioDriver *audioDriver);
 
+	virtual void CpuCyclesCallback(int numCycles);
+
 	void LoadRom(const List<unsigned char>& input);
 	bool HasRom() const;
 	void Start();
