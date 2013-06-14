@@ -15,10 +15,12 @@ Apu::~Apu()
 
 void Apu::SetAudioDriver(IAudioDriver *audioDriver)
 {
+	mutex->Lock();
 	auto oldAudioDriver = this->audioDriver;
 	if (oldAudioDriver) oldAudioDriver->SetRenderCallback(nullptr, nullptr);
 	this->audioDriver = audioDriver;
 	audioDriver->SetRenderCallback(renderCallbackRouter, this);
+	mutex->Unlock();
 }
 
 void Apu::SetBeeping(bool beeping)
