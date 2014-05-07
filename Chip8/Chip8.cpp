@@ -24,7 +24,7 @@ Chip8::Chip8()
 {
 	random.SetSeed(Time::GetCurrent());
 	ram = new unsigned char[4096];
-	rom = 0;
+	rom = nullptr;
 	romSize = 0;
 	stack = new Stack<unsigned short>(16);
 	speed = 20;
